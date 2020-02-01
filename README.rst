@@ -6,34 +6,8 @@
 edi.converter
 =============
 
-Tell me what your product does
-
-Features
---------
-
-- Can be bullet points
-
-
-Examples
---------
-
-This add-on can be seen in action at the following sites:
-- Is there a page on the internet where everybody can see the features?
-
-
-Documentation
--------------
-
-Full documentation for end users can be found in the "docs" folder, and is also available online at http://docs.plone.org/foo/bar
-
-
-Translations
-------------
-
-This product has been translated into
-
-- Klingon (thanks, K'Plai)
-
+Mit dem Package werden die Daten einer lokalen Plone-Site gelesen und via XMLRPC ausgeliefert. Auf dem fernen System
+muss der Branch xmlrpc des Packages nva.migration installiert sein.
 
 Installation
 ------------
@@ -57,13 +31,6 @@ Contribute
 - Issue Tracker: https://github.com/collective/edi.converter/issues
 - Source Code: https://github.com/collective/edi.converter
 - Documentation: https://docs.plone.org/foo/bar
-
-
-Support
--------
-
-If you are having issues, please let us know.
-We have a mailing list located at: project@example.com
 
 
 License
