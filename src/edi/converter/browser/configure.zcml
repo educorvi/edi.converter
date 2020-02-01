@@ -18,4 +18,111 @@
       directory="static"
       />
 
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    i18n_domain="nva.ploneviewcollection">
+
+  <include package="plone.app.contentmenu" />
+
+  <!-- -*- extra stuff goes here -*- -->
+
+  <browser:page
+      for="*"
+      name="rootfolder"
+      class=".converter.RootFolder"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="treebuilder"
+      class=".converter.Treebuilder"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="filebuilder"
+      class=".converter.Filebuilder"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="documentbuilder"
+      class=".converter.Documentbuilder"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="newsbuilder"
+      class=".converter.Newsbuilder"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="linkbuilder"
+      class=".converter.Linkbuilder"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="imagebuilder"
+      class=".converter.Imagebuilder"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="folderinfo"
+      class=".converter.FolderInfo"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="fileinfo"
+      class=".converter.FileInfo"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="imageinfo"
+      class=".converter.ImageInfo"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="documentinfo"
+      class=".converter.DocumentInfo"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="newsinfo"
+      class=".converter.NewsInfo"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="linkinfo"
+      class=".converter.LinkInfo"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="defaultpage"
+      class=".converter.DefaultPage"
+      permission="cmf.ManagePortal"
+      />
+
 </configure>
