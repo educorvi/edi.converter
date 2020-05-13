@@ -18,11 +18,6 @@
       directory="static"
       />
 
-<configure
-    xmlns="http://namespaces.zope.org/zope"
-    xmlns:browser="http://namespaces.zope.org/browser"
-    i18n_domain="nva.ploneviewcollection">
-
   <include package="plone.app.contentmenu" />
 
   <!-- -*- extra stuff goes here -*- -->
