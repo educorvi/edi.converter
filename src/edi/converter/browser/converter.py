@@ -4,7 +4,7 @@ from Products.CMFPlone.browser.navtree import SitemapNavtreeStrategy, DefaultNav
 from Products.Five import BrowserView
 from Products.CMFCore.utils import getToolByName
 from base64 import encodestring
-
+from plone import api as ploneapi
 
 class RootFolder(BrowserView):
     """
@@ -51,10 +51,10 @@ class RootFolder(BrowserView):
                 myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
             except:
                 print(obj.absolute_url())
-            myobj['excludeFromNav'] = obj.exclude_from_nav()
-            myobj['creators'] = obj.Creators()
-            myobj['contributors'] = obj.Contributors()
-            myobj['rights'] = obj.Rights()
+            myobj['excludeFromNav'] = obj.exclude_from_nav
+            myobj['creators'] = obj.creators
+            myobj['contributors'] = obj.contributors
+            myobj['rights'] = obj.rights
             #if obj.id != "Members":
             #    objlist.append(myobj)
             objlist.append(myobj)
@@ -98,7 +98,7 @@ class FolderInfo(BrowserView):
         myobj['description'] = obj.description
         workflowTool = getToolByName(self.context, "portal_workflow")
         status = workflowTool.getStatusOf("folder_workflow", obj)
-        myobj['review_state'] = status.get('review_state')
+        myobj['review_state'] = ploneapi.content.get_state(obj)#status.get('review_state')
         myobj['localroles'] = obj.get_local_roles()
         try:
 	    if obj.__ac_local_roles_block__:
@@ -117,10 +117,10 @@ class FolderInfo(BrowserView):
 	    myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
         except:
 	    print(obj.absolute_url())
-        myobj['excludeFromNav'] = obj.exclude_from_nav()
-        myobj['creators'] = obj.Creators()
-        myobj['contributors'] = obj.Contributors()
-        myobj['rights'] = obj.Rights()
+        myobj['excludeFromNav'] = obj.exclude_from_nav
+        myobj['creators'] = obj.creators
+        myobj['contributors'] = obj.contributors
+        myobj['rights'] = obj.rights
         return myobj
 
 
@@ -140,19 +140,19 @@ class FileInfo(BrowserView):
         myobj['description'] = obj.description
         workflowTool = getToolByName(self.context, "portal_workflow")
         status = workflowTool.getStatusOf("plone_workflow", obj)
-        myobj['review_state'] = status.get('review_state')
+        myobj['review_state'] = ploneapi.content.get_state(obj)#status.get('review_state')
         myobj['creation_date'] = obj.created().strftime('%Y-%m-%dT%H:%M:%S')
         try:
             myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
         except:
             print(obj.absolute_url())
-        myobj['excludeFromNav'] = obj.exclude_from_nav()
-        myobj['creators'] = obj.Creators()
-        myobj['contributors'] = obj.Contributors()
-        myobj['rights'] = obj.Rights()
+        myobj['excludeFromNav'] = obj.exclude_from_nav
+        myobj['creators'] = obj.creators
+        myobj['contributors'] = obj.contributors
+        myobj['rights'] = obj.rights
         myobj['filedata'] = obj.absolute_url() + '/at_download/file'
         myobj['content_type'] = obj.content_type
-        myobj['filename'] = obj.getFilename()
+        myobj['filename'] = obj.file.filename #obj.getFilename()
         return myobj
 
 class ImageInfo(BrowserView):
@@ -171,19 +171,19 @@ class ImageInfo(BrowserView):
         myobj['description'] = obj.description
         workflowTool = getToolByName(self.context, "portal_workflow")
         status = workflowTool.getStatusOf("plone_workflow", obj)
-        myobj['review_state'] = status.get('review_state')
+        myobj['review_state'] = ploneapi.content.get_state(obj)#status.get('review_state')
         myobj['creation_date'] = obj.created().strftime('%Y-%m-%dT%H:%M:%S')
         try:
             myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
         except:
             print(obj.absolute_url())
-        myobj['excludeFromNav'] = obj.exclude_from_nav()
-        myobj['creators'] = obj.Creators()
-        myobj['contributors'] = obj.Contributors()
-        myobj['rights'] = obj.Rights()
-        myobj['filedata'] = obj.absolute_url() + '/at_download/image'
+        myobj['excludeFromNav'] = obj.exclude_from_nav
+        myobj['creators'] = obj.creators
+        myobj['contributors'] = obj.contributors
+        myobj['rights'] = obj.rights
+        myobj['filedata'] = obj.absolute_url()# + '/at_download/image'
         myobj['content_type'] = obj.content_type
-        myobj['filename'] = obj.getFilename()
+        myobj['filename'] = obj.image.filename #obj.getFilename()
         return myobj
 
 class DocumentInfo(BrowserView):
@@ -201,7 +201,7 @@ class DocumentInfo(BrowserView):
         myobj['description'] = obj.description
         workflowTool = getToolByName(self.context, "portal_workflow")
         status = workflowTool.getStatusOf("plone_workflow", obj)
-        myobj['review_state'] = status.get('review_state')
+        myobj['review_state'] = ploneapi.content.get_state(obj)#status.get('review_state')
         try:
             myobj['creation_date'] = obj.created().strftime('%Y-%m-%dT%H:%M:%S')
         except:
@@ -210,19 +210,22 @@ class DocumentInfo(BrowserView):
             myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
         except:
             print(obj.absolute_url())
-        myobj['excludeFromNav'] = obj.exclude_from_nav()
-        myobj['creators'] = obj.Creators()
-        myobj['contributors'] = obj.Contributors()
-        myobj['rights'] = obj.Rights()
-        rawtext = obj.getRawText()
-        rawtext = rawtext.replace('/image_large', '/@@images/image/large')
-        rawtext = rawtext.replace('/image_preview', '/@@images/image/preview')
-        rawtext = rawtext.replace('/image_mini', '/@@images/image/mini')
-        rawtext = rawtext.replace('/image_thumb', '/@@images/image/thumb')
-        rawtext = rawtext.replace('/image_tile', '/@@images/image/tile')
-        rawtext = rawtext.replace('/image_icon', '/@@images/image/icon')
-        rawtext = rawtext.replace('/image_listing', '/@@images/image/listing')
-        myobj['txt'] = rawtext
+        myobj['excludeFromNav'] = obj.exclude_from_nav
+        myobj['creators'] = obj.creators
+        myobj['contributors'] = obj.contributors
+        myobj['rights'] = obj.rights
+        try:
+            rawtext = obj.text.raw #obj.getRawText()
+            rawtext = rawtext.replace('/image_large', '/@@images/image/large')
+            rawtext = rawtext.replace('/image_preview', '/@@images/image/preview')
+            rawtext = rawtext.replace('/image_mini', '/@@images/image/mini')
+            rawtext = rawtext.replace('/image_thumb', '/@@images/image/thumb')
+            rawtext = rawtext.replace('/image_tile', '/@@images/image/tile')
+            rawtext = rawtext.replace('/image_icon', '/@@images/image/icon')
+            rawtext = rawtext.replace('/image_listing', '/@@images/image/listing')
+            myobj['txt'] = rawtext
+        except:
+            myobj['txt'] = ""
         return myobj
 
 class NewsInfo(BrowserView):
@@ -241,7 +244,7 @@ class NewsInfo(BrowserView):
         myobj['description'] = obj.description
         workflowTool = getToolByName(self.context, "portal_workflow")
         status = workflowTool.getStatusOf("plone_workflow", obj)
-        myobj['review_state'] = status.get('review_state')
+        myobj['review_state'] = ploneapi.content.get_state(obj)#status.get('review_state')
         try:
             myobj['creation_date'] = obj.created().strftime('%Y-%m-%dT%H:%M:%S')
         except:
@@ -250,24 +253,27 @@ class NewsInfo(BrowserView):
             myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
         except:
             print(obj.absolute_url())
-        myobj['excludeFromNav'] = obj.exclude_from_nav()
-        myobj['creators'] = obj.Creators()
-        myobj['contributors'] = obj.Contributors()
-        myobj['rights'] = obj.Rights()
+        myobj['excludeFromNav'] = obj.exclude_from_nav
+        myobj['creators'] = obj.creators
+        myobj['contributors'] = obj.contributors
+        myobj['rights'] = obj.rights
         myobj['filedata'] = ''
-        if obj.getImage():
-            myobj['filedata'] = obj.absolute_url() + '/at_download/image'
+        if obj.image:
+            myobj['filedata'] = obj.absolute_url()# + '/at_download/image'
+            myobj['filename'] = obj.image.filename #obj.getFilename()
         myobj['content_type'] = obj.content_type
-        myobj['filename'] = obj.getFilename()
-        rawtext = obj.getRawText()
-        rawtext = rawtext.replace('/image_large', '/@@images/image/large')
-        rawtext = rawtext.replace('/image_preview', '/@@images/image/preview')
-        rawtext = rawtext.replace('/image_mini', '/@@images/image/mini')
-        rawtext = rawtext.replace('/image_thumb', '/@@images/image/thumb')
-        rawtext = rawtext.replace('/image_tile', '/@@images/image/tile')
-        rawtext = rawtext.replace('/image_icon', '/@@images/image/icon')
-        rawtext = rawtext.replace('/image_listing', '/@@images/image/listing')
-        myobj['txt'] = rawtext
+        try:
+            rawtext = obj.text.raw #obj.getRawText()
+            rawtext = rawtext.replace('/image_large', '/@@images/image/large')
+            rawtext = rawtext.replace('/image_preview', '/@@images/image/preview')
+            rawtext = rawtext.replace('/image_mini', '/@@images/image/mini')
+            rawtext = rawtext.replace('/image_thumb', '/@@images/image/thumb')
+            rawtext = rawtext.replace('/image_tile', '/@@images/image/tile')
+            rawtext = rawtext.replace('/image_icon', '/@@images/image/icon')
+            rawtext = rawtext.replace('/image_listing', '/@@images/image/listing')
+            myobj['txt'] = rawtext
+        except:
+            myobj['txt'] = ""
         return myobj
 
 
@@ -286,7 +292,7 @@ class LinkInfo(BrowserView):
         myobj['description'] = obj.description
         workflowTool = getToolByName(self.context, "portal_workflow")
         status = workflowTool.getStatusOf("plone_workflow", obj)
-        myobj['review_state'] = status.get('review_state')
+        myobj['review_state'] = ploneapi.content.get_state(obj)#status.get('review_state')
         try:
             myobj['creation_date'] = obj.created().strftime('%Y-%m-%dT%H:%M:%S')
         except:
@@ -295,11 +301,11 @@ class LinkInfo(BrowserView):
             myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
         except:
             print(obj.absolute_url())
-        myobj['excludeFromNav'] = obj.exclude_from_nav()
-        myobj['creators'] = obj.Creators()
-        myobj['contributors'] = obj.Contributors()
-        myobj['rights'] = obj.Rights()
-        myobj['remoteUrl'] = obj.getRemoteUrl()
+        myobj['excludeFromNav'] = obj.exclude_from_nav
+        myobj['creators'] = obj.creators
+        myobj['contributors'] = obj.contributors
+        myobj['rights'] = obj.rights
+        myobj['remoteUrl'] = obj.remoteUrl #obj.getRemoteUrl()
         return myobj
 
 
@@ -308,7 +314,7 @@ class LinkInfo(BrowserView):
 class Filebuilder(BrowserView):
 
     def __call__(self):
-        pfad = '/intranet/%s' %self.context.id
+        pfad = '/bghwintranet/%s' %self.context.id
         pcat = getToolByName(self.context, 'portal_catalog')
         brains = pcat(portal_type='File', path=pfad)
         print(len(brains))
@@ -320,7 +326,7 @@ class Filebuilder(BrowserView):
 class Imagebuilder(BrowserView):
 
     def __call__(self):
-        pfad = '/intranet/%s' %self.context.id
+        pfad = '/bghwintranet/%s' %self.context.id
         pcat = getToolByName(self.context, 'portal_catalog')
         brains = pcat(portal_type='Image', path=pfad)
         print(len(brains))
@@ -332,7 +338,7 @@ class Imagebuilder(BrowserView):
 class Documentbuilder(BrowserView):
 
     def __call__(self):
-        pfad = '/intranet/%s' %self.context.id
+        pfad = '/bghwintranet/%s' %self.context.id
         pcat = getToolByName(self.context, 'portal_catalog')
         brains = pcat(portal_type='Document', path=pfad)
         print(len(brains))
@@ -344,7 +350,7 @@ class Documentbuilder(BrowserView):
 class Newsbuilder(BrowserView):
 
     def __call__(self):
-        pfad = '/intranet/%s' %self.context.id
+        pfad = '/bghwintranet/%s' %self.context.id
         pcat = getToolByName(self.context, 'portal_catalog')
         brains = pcat(portal_type='News Item', path=pfad)
         print(len(brains))
@@ -356,7 +362,7 @@ class Newsbuilder(BrowserView):
 class Linkbuilder(BrowserView):
 
     def __call__(self):
-        pfad = '/intranet/%s' %self.context.id
+        pfad = '/bghwintranet/%s' %self.context.id
         pcat = getToolByName(self.context, 'portal_catalog')
         brains = pcat(portal_type='Link', path=pfad)
         print(len(brains))
