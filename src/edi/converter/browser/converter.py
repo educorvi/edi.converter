@@ -150,7 +150,7 @@ class FileInfo(BrowserView):
         myobj['creators'] = obj.creators
         myobj['contributors'] = obj.contributors
         myobj['rights'] = obj.rights
-        myobj['filedata'] = obj.absolute_url() + '/at_download/file'
+        myobj['filedata'] = obj.absolute_url()
         myobj['content_type'] = obj.content_type
         myobj['filename'] = obj.file.filename #obj.getFilename()
         return myobj
