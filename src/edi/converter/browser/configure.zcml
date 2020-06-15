@@ -73,6 +73,27 @@
 
   <browser:page
       for="*"
+      name="stammblattbuilder"
+      class=".converter.Stammblattbuilder"
+      permission="cmf.ManagePortal"
+      />
+      
+  <browser:page
+      for="*"
+      name="kollektionsbuilder"
+      class=".converter.Kollektionsbuilder"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="funktionsgruppenbuilder"
+      class=".converter.Funktionsgruppenbuilder"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
       name="folderinfo"
       class=".converter.FolderInfo"
       permission="cmf.ManagePortal"
@@ -110,6 +131,27 @@
       for="*"
       name="linkinfo"
       class=".converter.LinkInfo"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="stammblattinfo"
+      class=".converter.StammblattInfo"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="kollektioninfo"
+      class=".converter.KollektionInfo"
+      permission="cmf.ManagePortal"
+      />
+
+  <browser:page
+      for="*"
+      name="funktionsgruppeninfo"
+      class=".converter.FunktionsgruppenInfo"
       permission="cmf.ManagePortal"
       />
 

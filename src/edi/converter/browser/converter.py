@@ -55,8 +55,6 @@ class RootFolder(BrowserView):
             myobj['creators'] = obj.creators
             myobj['contributors'] = obj.contributors
             myobj['rights'] = obj.rights
-            #if obj.id != "Members":
-            #    objlist.append(myobj)
             objlist.append(myobj)
         return objlist
 
@@ -116,7 +114,7 @@ class FolderInfo(BrowserView):
         try:
 	    myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
         except:
-	    print(obj.absolute_url())
+	        print(obj.absolute_url())
         myobj['excludeFromNav'] = obj.exclude_from_nav
         myobj['creators'] = obj.creators
         myobj['contributors'] = obj.contributors
@@ -308,13 +306,161 @@ class LinkInfo(BrowserView):
         myobj['remoteUrl'] = obj.remoteUrl #obj.getRemoteUrl()
         return myobj
 
+class StammblattInfo(BrowserView):
+    """
+       Liefert die Informationen einer einzelnen Stammblatts. Der Dateiinhalt wird mittels
+       separatem Download-Request gelesen.
+    """
+
+    def __call__(self):
+        myobj = {}
+        obj = self.context
+        myobj['uid'] = obj.UID()
+        myobj['id'] = obj.id
+        myobj['parent'] = obj.aq_inner.aq_parent.UID()
+        myobj['title'] = obj.title
+        myobj['description'] = obj.description
+        workflowTool = getToolByName(self.context, "portal_workflow")
+        status = workflowTool.getStatusOf("plone_workflow", obj)
+        myobj['review_state'] = ploneapi.content.get_state(obj)#status.get('review_state')
+        myobj['creation_date'] = obj.created().strftime('%Y-%m-%dT%H:%M:%S')
+        try:
+            myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
+        except:
+            print(obj.absolute_url())
+        myobj['excludeFromNav'] = obj.exclude_from_nav
+        myobj['creators'] = obj.creators
+        myobj['contributors'] = obj.contributors
+        myobj['rights'] = obj.rights
+        myobj['filedata'] = obj.absolute_url()
+        myobj['content_type'] = obj.content_type
+        try:
+            myobj['ziele'] = obj.ziele.raw
+        except:
+            myobj['ziele'] = " "
+        try:
+            myobj['verantwortung'] = obj.verantwortung
+        except:
+            myobj['verantwortung'] = " "
+        try:
+            myobj['steuerung'] = obj.steuerung
+        except:
+            myobj['steuerung'] = " "
+        try:
+            myobj['anstoss'] = obj.anstoss
+        except:
+            myobj['anstoss'] = " "
+        try:
+            myobj['eingaben'] = obj.eingaben
+        except:
+            myobj['eingaben'] = " "
+        try:
+            myobj['ergebnisse'] = obj.ergebnisse.raw
+        except:
+            myobj['ergebnisse'] = " "
+        try:
+            myobj['kennzahlen'] = obj.kennzahlen.raw
+        except:
+            myobj['kennzahlen'] = " "
+        try:
+            myobj['grundlagen'] = obj.grundlagen.raw
+        except:
+            myobj['grundlagen'] = " "
+        try:
+            myobj['dokumente'] = obj.dokumente.raw
+        except:
+            myobj['dokumente'] = " "
+        try:
+            myobj['formulare'] = obj.formulare.raw
+        except:
+            myobj['formulare'] = " "
+        try:
+            myobj['risikobewertung'] = obj.risikobewertung.raw
+        except:
+            myobj['risikobewertung'] = " "
+        
+        return myobj
+
+
+class KollektionInfo(BrowserView):
+    """
+       Liefert die Informationen einer einzelnen Kollektion.
+    """
+
+    def __call__(self):
+        myobj = {}
+        obj = self.context
+        myobj['uid'] = obj.UID()
+        myobj['id'] = obj.id
+        myobj['parent'] = obj.aq_inner.aq_parent.UID()
+        myobj['title'] = obj.title
+        myobj['description'] = obj.description
+        myobj['review_state'] = ploneapi.content.get_state(obj)#status.get('review_state')
+        try:
+            myobj['creation_date'] = obj.created().strftime('%Y-%m-%dT%H:%M:%S')
+        except:
+            myobj['creation_date'] = u'2020-01-31T12:00:00'
+        try:
+            myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
+        except:
+            print(obj.absolute_url())
+        myobj['excludeFromNav'] = obj.exclude_from_nav
+        myobj['creators'] = obj.creators
+        myobj['contributors'] = obj.contributors
+        myobj['rights'] = obj.rights
+        myobj['sort_on'] = obj.sort_on
+        myobj['customViewFields'] = obj.customViewFields
+        myobj['at_references'] = obj.at_references
+        myobj['sort_reversed'] = obj.sort_reversed
+        myobj['query'] = obj.query
+        try:
+            myobj['txt'] = obj.text.raw
+        except:
+            pass
+        return myobj
+
+class FunktionsgruppenInfo(BrowserView):
+    """
+       Liefert die Informationen einer einzelnen Funktionsgruppe.
+    """
+
+    def __call__(self):
+        myobj = {}
+        obj = self.context
+        myobj['uid'] = obj.UID()
+        myobj['id'] = obj.id
+        myobj['parent'] = obj.aq_inner.aq_parent.UID()
+        myobj['title'] = obj.title
+        myobj['description'] = obj.description
+        myobj['review_state'] = ploneapi.content.get_state(obj)#status.get('review_state')
+        try:
+            myobj['creation_date'] = obj.created().strftime('%Y-%m-%dT%H:%M:%S')
+        except:
+            myobj['creation_date'] = u'2020-01-31T12:00:00'
+        try:
+            myobj['effective_date'] = obj.effective().strftime('%Y-%m-%dT%H:%M:%S')
+        except:
+            print(obj.absolute_url())
+        myobj['excludeFromNav'] = obj.exclude_from_nav
+        myobj['creators'] = obj.creators
+        myobj['contributors'] = obj.contributors
+        myobj['rights'] = obj.rights
+        myobj['groupmembers'] = obj.groupmembers
+        try:
+            myobj['txt'] = obj.text.raw
+        except:
+            pass
+        return myobj
+
 
 ## Die folgenden Views liefern Objektlisten mit URLs an die Gegenseite ##
+
+URL = '/bghwintranet/aufgaben/regress/'
 
 class Filebuilder(BrowserView):
 
     def __call__(self):
-        pfad = '/bghwintranet/%s' %self.context.id
+        pfad = URL + '%s' %self.context.id
         pcat = getToolByName(self.context, 'portal_catalog')
         brains = pcat(portal_type='File', path=pfad)
         print(len(brains))
@@ -326,7 +472,7 @@ class Filebuilder(BrowserView):
 class Imagebuilder(BrowserView):
 
     def __call__(self):
-        pfad = '/bghwintranet/%s' %self.context.id
+        pfad = URL + '%s' %self.context.id
         pcat = getToolByName(self.context, 'portal_catalog')
         brains = pcat(portal_type='Image', path=pfad)
         print(len(brains))
@@ -338,7 +484,7 @@ class Imagebuilder(BrowserView):
 class Documentbuilder(BrowserView):
 
     def __call__(self):
-        pfad = '/bghwintranet/%s' %self.context.id
+        pfad = URL + '%s' %self.context.id
         pcat = getToolByName(self.context, 'portal_catalog')
         brains = pcat(portal_type='Document', path=pfad)
         print(len(brains))
@@ -350,7 +496,7 @@ class Documentbuilder(BrowserView):
 class Newsbuilder(BrowserView):
 
     def __call__(self):
-        pfad = '/bghwintranet/%s' %self.context.id
+        pfad = URL + '%s' %self.context.id
         pcat = getToolByName(self.context, 'portal_catalog')
         brains = pcat(portal_type='News Item', path=pfad)
         print(len(brains))
@@ -362,9 +508,45 @@ class Newsbuilder(BrowserView):
 class Linkbuilder(BrowserView):
 
     def __call__(self):
-        pfad = '/bghwintranet/%s' %self.context.id
+        pfad = URL + '%s' %self.context.id
         pcat = getToolByName(self.context, 'portal_catalog')
         brains = pcat(portal_type='Link', path=pfad)
+        print(len(brains))
+        idlist = []
+        for i in brains:
+            idlist.append(i.getURL())
+        return idlist
+
+class Stammblattbuilder(BrowserView):
+
+    def __call__(self):
+        pfad = URL + '%s' %self.context.id
+        pcat = getToolByName(self.context, 'portal_catalog')
+        brains = pcat(portal_type='Stammblatt', path=pfad)
+        print(len(brains))
+        idlist = []
+        for i in brains:
+            idlist.append(i.getURL())
+        return idlist
+
+class Kollektionsbuilder(BrowserView):
+
+    def __call__(self):
+        pfad = URL + '%s' %self.context.id
+        pcat = getToolByName(self.context, 'portal_catalog')
+        brains = pcat(portal_type='Collection', path=pfad)
+        print(len(brains))
+        idlist = []
+        for i in brains:
+            idlist.append(i.getURL())
+        return idlist
+    
+class Funktionsgruppenbuilder(BrowserView):
+
+    def __call__(self):
+        pfad = URL + '%s' %self.context.id
+        pcat = getToolByName(self.context, 'portal_catalog')
+        brains = pcat(portal_type='Funktionsgruppe', path=pfad)
         print(len(brains))
         idlist = []
         for i in brains:
